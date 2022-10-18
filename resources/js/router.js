@@ -44,5 +44,5 @@ const router = new VueRouter({
     ]
 });
 
-// esporto il router creato per poterlo usare nel componente globale.
+// esporto il router creato per poterlo usare nel componente globale (devo importarlo in front.js).
 export default router;

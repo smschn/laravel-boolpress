@@ -9,24 +9,8 @@
         </div>
         <!-- lista post con else (a fine risposta api viene mostrata questa lista) -->
         <div v-else class="row">
-            <div class="card col-12 mb-3" v-for="(post, index) in posts" v-bind:key="index">
-                <div class="card-body">
-                    <h5 class="card-title">{{post.title}}</h5>
-                    <!--
-                        ricorda: prima serve ricostruire le relazioni nella api con il metodo statico ::with.
-                        poi, con operatore ternario verifico presenza categoria e stampo di conseguenza.
-                    -->
-                    <p class="card-text">{{post.category?post.category.name:'-'}}</p>
-                    <!-- per mezzo di una funzione taglio il testo del contenuto -->
-                    <p class="card-text">{{truncateText(post.content, 15)}}</p>
-                    <!-- aggiungo i tag (sono un array contenuto in post) -->
-                    <ul v-if="post.tags.length" class="card-text list-unstyled d-flex">
-                        <li v-for="(tag, index) in post.tags" v-bind:key='index' class="btn btn-secondary mr-2 disabled">{{tag.name}}</li>
-                    </ul>
-                    <p v-else>-</p>
-                    <a href="#" class="btn btn-primary">Read more...</a>
-                </div>
-            </div>
+            <!-- aggiungo il componente, passandogli il singolo oggetto <post> ciclato tramite props -->
+            <MyPost v-for="(post, index) in posts" v-bind:key="index" v-bind:post="post" />
         </div>
         <!-- paginazione -->
         <nav>
@@ -45,8 +29,14 @@
 </template>
 
 <script>
+// importo il componente per gestire il singolo post.
+import MyPost from '../components/MyPost.vue';
+
 export default {
     name: 'PostsPage',
+    components: {
+        MyPost // registro il componente importato.
+    },
     data() {
         return {
             posts: [],
@@ -79,14 +69,6 @@ export default {
                 this.lastPage = response.data.results.last_page; // dati presenti solo DOPO la ->paginate().
                 this.loading = false; // setto il loader a false una volta ricevuta la risposta dall'api.
             })
-        },
-        // metodo per tagliare il testo di un contenuto che superi una data lunghezza.
-        truncateText(text, maxLength) {
-            if (text.length < maxLength) {
-                return text;
-            } else {
-                return text.substring(0, maxLength) + '...';
-            }
         }
     },
     mounted() {
