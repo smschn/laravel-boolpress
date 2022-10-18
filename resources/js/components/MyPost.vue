@@ -14,7 +14,15 @@
                 <li v-for="(tag, index) in post.tags" v-bind:key='index' class="btn btn-secondary mr-2 disabled">{{tag.name}}</li>
             </ul>
             <p v-else>-</p>
-            <a href="#" class="btn btn-primary">Read more...</a>
+            <!--
+                aggiungo un link con l'attributo :to che porta al componente con <name>,
+                passandogli come secondo parametro un elemento dinamico (lo slug del singolo post)
+                che crea dinamicamente la URI per ogni singolo post (es: localhost:9999/blog/esempio-slug-dinamico).
+                +
+                il nome <slug> nel secondo parametro deve coincidere con il nome della parte dinamica
+                scritto nella path del file routing.js.
+            -->
+            <router-link :to="{name: 'single-post', params: {slug: post.slug} }" class="btn btn-primary">Read more...</router-link>
         </div>
     </div>
 </template>

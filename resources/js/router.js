@@ -11,6 +11,7 @@ import AboutUsPage from './pages/AboutUsPage.vue';
 import HomePage from './pages/HomePage.vue';
 import PostsPage from './pages/PostsPage.vue';
 import NotFound from './pages/NotFound.vue';
+import SinglePost from './pages/SinglePost.vue';
 
 // creo una nuova istanza di vue router.
 const router = new VueRouter({
@@ -37,6 +38,11 @@ const router = new VueRouter({
             component: PostsPage
         },
         {
+            path: '/blog/:slug', // creo una route con una parte dinamica (:slug) per gestire ogni singolo post.
+            name: 'single-post',
+            component: SinglePost
+        },
+        {
             path: '/*', // raccolgo tutti gli uri che non sono presenti in questo array.
             name: 'not-found',
             component: NotFound
@@ -44,5 +50,5 @@ const router = new VueRouter({
     ]
 });
 
-// esporto il router creato per poterlo usare nel componente globale (devo importarlo in front.js).
+// esporto il router creato per poterlo usare nel componente globale (ora devo importarlo in front.js).
 export default router;
