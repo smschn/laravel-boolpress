@@ -14860,7 +14860,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\LBoolean\Documents\boolean\progetti\58\laravel-api\resources\js\front.js */"./resources/js/front.js");
+module.exports = __webpack_require__(/*! C:\Users\LBoolean\Documents\boolean\progetti\59\laravel-boolpress\resources\js\front.js */"./resources/js/front.js");
 
 
 /***/ })
