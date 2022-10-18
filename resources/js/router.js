@@ -9,6 +9,7 @@ Vue.use(VueRouter);
 import ContactPage from './pages/ContactPage.vue';
 import AboutUsPage from './pages/AboutUsPage.vue';
 import HomePage from './pages/HomePage.vue';
+import PostsPage from './pages/PostsPage.vue';
 
 // creo una nuova istanza di vue router.
 const router = new VueRouter({
@@ -28,8 +29,12 @@ const router = new VueRouter({
             path: '/about-us',
             name: 'aboutus',
             component: AboutUsPage
+        },
+        {
+            path: '/blog',
+            name: 'blog',
+            component: PostsPage
         }
-
     ]
 });
 
