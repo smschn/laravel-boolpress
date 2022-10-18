@@ -27,4 +27,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     nel secondo parametro della get() uso il backslash per indicare il namespace\la path.
 */
 Route::get('posts', 'Api\PostController@index');
-Route::get('posts/{post}', 'Api\PostController@show');
+Route::get('posts/{slug}', 'Api\PostController@show');

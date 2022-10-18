@@ -2114,7 +2114,25 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'SinglePost'
+  name: 'SinglePost',
+  methods: {
+    getSinglePost: function getSinglePost() {
+      // salvo in una variabile lo slug.
+      var slug = this.$route.params.slug;
+      /*
+          faccio chiamata axios per ottenere tutti i dati del singolo post con questo specifico slug.
+          l'uri è <api/posts/+slug> perché è impostato così nel file api.php:
+          facendo una chiamata axios a questa URI, richiamo la show() dentro il controller delle API.
+      */
+
+      axios.get('/api/posts/' + slug).then(function (response) {
+        console.log(response.data);
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getSinglePost();
+  }
 });
 
 /***/ }),

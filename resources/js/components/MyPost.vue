@@ -15,11 +15,14 @@
             </ul>
             <p v-else>-</p>
             <!--
-                aggiungo un link con l'attributo :to che porta al componente con <name>,
-                passandogli come secondo parametro un elemento dinamico (lo slug del singolo post)
-                che crea dinamicamente la URI per ogni singolo post (es: localhost:9999/blog/esempio-slug-dinamico).
+                al posto del tag <a> uso il <router-link> che è un componente:
+                esso NON fa partire una richiesta GET verso il server per richiedere la pagina.
                 +
-                il nome <slug> nel secondo parametro deve coincidere con il nome della parte dinamica
+                nell'attributo :to indico il nome della route vue da caricare (primo parametro),
+                passandogli come secondo parametro un elemento dinamico (lo slug del singolo post):
+                così viene creata una URI specifica per ogni singolo post (es: localhost:9999/blog/esempio-slug-dinamico).
+                +
+                nel secondo parametro, la parola <slug> deve coincidere con il nome della parte dinamica
                 scritto nella path del file routing.js.
             -->
             <router-link :to="{name: 'single-post', params: {slug: post.slug} }" class="btn btn-primary">Read more...</router-link>

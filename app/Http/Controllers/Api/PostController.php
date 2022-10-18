@@ -38,9 +38,23 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug) // ricevo in ingresso lo slug da <singlepost.vue> in \resources\js\pages\.
     {
-        //
+        // recupero il post con lo slug in ingresso.
+        $post = Post::where('slug', $slug)->first();
+
+        // struttura con if per gestire la NON esistenza del post con quello specifico slug.
+        if ($post) {
+            return response()->json([
+                'success' => true,
+                'results' => $post
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Il post richiesto non esiste!' // lo vedo in console.
+            ]);
+        }
     }
 
 }
