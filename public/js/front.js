@@ -1914,16 +1914,17 @@ __webpack_require__.r(__webpack_exports__);
     return {
       navbarLinks: [{
         text: 'Home',
-        link: '#'
+        routeName: 'homepage' // come link inserisco i <name> delle routes del router nel file <router.js>.
+
       }, {
         text: 'Blog',
-        link: '#'
+        routeName: 'blog'
       }, {
         text: 'About us',
-        link: '#'
+        routeName: 'aboutus'
       }, {
         text: 'Contact',
-        link: '#'
+        routeName: 'contact'
       }]
     };
   }
@@ -2117,12 +2118,14 @@ var render = function render() {
     return _c("li", {
       key: index,
       staticClass: "nav-item"
-    }, [_c("a", {
+    }, [_c("router-link", {
       staticClass: "nav-link",
       attrs: {
-        href: link.link
+        to: {
+          name: link.routeName
+        }
       }
-    }, [_vm._v(_vm._s(link.text))])]);
+    }, [_vm._v(_vm._s(link.text))])], 1);
   }), 0)])])]);
 };
 

@@ -10,7 +10,16 @@
             <ul class="navbar-nav mr-auto">
                 <!-- ciclo i link; ricorda: usa la :key con l'index. -->
                 <li v-for="(link, index) in navbarLinks" class="nav-item" v-bind:key="index">
-                    <a class="nav-link" v-bind:href="link.link">{{link.text}}</a>
+                    <!--
+                        al posto del tag <a> uso il <router-link> che è un componente:
+                        esso NON fa partire una richiesta GET verso il server per richiedere la pagina.
+                        +
+                        aggiungo l'attributo :to="{name:}" in cui indico il nome della route di vue da caricare:
+                        così facendo, nel file router.js, vue risale dal nome della route:
+                        1. al componente da mostrare, nascondendo gli altri.
+                        2. all'uri, che viene modificato (nonostante non ci sia un vero cambio di pagina).
+                    -->
+                    <router-link class="nav-link" :to="{name: link.routeName}">{{link.text}}</router-link>
                 </li>
             </ul>
         </div>
@@ -26,19 +35,19 @@ export default {
             navbarLinks: [
                 {
                     text: 'Home',
-                    link: '#'
+                    routeName: 'homepage' // come link inserisco i <name> delle routes del router nel file <router.js>.
                 },
                 {
                     text: 'Blog',
-                    link: '#'
+                    routeName: 'blog'
                 },
                 {
                     text: 'About us',
-                    link: '#'
+                    routeName: 'aboutus'
                 },
                 {
                     text: 'Contact',
-                    link: '#'
+                    routeName: 'contact'
                 }
             ]
         }
