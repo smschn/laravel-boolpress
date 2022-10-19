@@ -2144,6 +2144,8 @@ __webpack_require__.r(__webpack_exports__);
           con una catch() gestisco l'eventuale errore della ->firstOrFail() nell'API controller:
           this.$router.push fa un redirect verso la route vue definita nel <name>
           (usando il nome definito nel file router.js).
+          testo caricando una URI con uno slug non esistente (es: localhost:9999/blog/qazwsx):
+          deve mostrare il componente vue con nome not-found.
       */
       ["catch"](function (error) {
         _this.$router.push({
@@ -2153,6 +2155,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    // avvio il metodo al montaggio dell'istanza di vue.
     this.getSinglePost();
   }
 });
@@ -2544,7 +2547,7 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("article", [_c("h1", [_vm._v(_vm._s(_vm.post.title))]), _vm._v(" "), _c("div", {
+  return _c("div", [_vm.post ? _c("article", [_c("h1", [_vm._v(_vm._s(_vm.post.title))]), _vm._v(" "), _c("div", {
     staticClass: "mb-2"
   }, [_vm._v(_vm._s(_vm.post.category ? _vm.post.category.name : "No category"))]), _vm._v(" "), _c("div", {
     staticClass: "mb-3"
@@ -2553,10 +2556,31 @@ var render = function render() {
       key: tag.id,
       staticClass: "btn btn-secondary mr-2 disabled"
     }, [_vm._v(_vm._s(tag.name))]);
-  }), 0), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.post.content))])])]);
+  }), 0), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.post.content))]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary mr-2",
+    attrs: {
+      to: {
+        name: "blog"
+      }
+    }
+  }, [_vm._v("Return to blog index")])], 1) : _c("div", {
+    staticClass: "d-flex justify-content-center"
+  }, [_vm._m(0)])]);
 };
 
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "spinner-border",
+    attrs: {
+      role: "status"
+    }
+  }, [_c("span", {
+    staticClass: "sr-only"
+  }, [_vm._v("Loading...")])]);
+}];
 render._withStripped = true;
 
 
