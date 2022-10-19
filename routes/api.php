@@ -27,4 +27,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     nel secondo parametro della get() uso il backslash per indicare il namespace\la path.
 */
 Route::get('posts', 'Api\PostController@index');
+
+/*
+    attenzione:
+    se metto <posts/random> NON deve essere all'ultima riga,
+    altrimenti finisco nella route dinamica dello slug.
+*/
+Route::get('post/random', 'Api\PostController@randomPost');
 Route::get('posts/{slug}', 'Api\PostController@show');

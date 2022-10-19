@@ -24,6 +24,8 @@ class PostController extends Controller
         */
         $posts = Post::with(['category', 'tags'])->paginate(2); // si chiama: Eager Loading Multiple Relationships.
 
+        // PLACEHOLDER: inserire immagini quando le implemento.
+
         // faccio una return della collection <posts> che viene trasformata in formato json,
         // affinché sia utilizzabile con le api.
         return response()->json([
@@ -47,14 +49,29 @@ class PostController extends Controller
         */
         $post = Post::where('slug', $slug)->with(['category', 'tags'])->firstOrFail();
 
-        // struttura con if per gestire la NON esistenza del post con quello specifico slug.
-        if ($post) {
-            // se esiste, lo invio in formato json al front, come risposta alla chiamata axios.
-            return response()->json([
-                'success' => true,
-                'result' => $post
-            ]);
-        }
+        // PLACEHOLDER: inserire immagini quando le implemento.
+        
+        // se esiste, lo invio in formato json al front, come risposta alla chiamata axios.
+        return response()->json([
+            'success' => true,
+            'result' => $post
+        ]);
+        
+    }
+
+    public function randomPost() {
+        /*
+            NON ho implementato una view o un vue router per mostrare i risultati.
+            per testarne il funzionamento carico la URI: api/post/random,
+            verifico con dd() cosa ho ricevuto.
+        */
+        $post = Post::inRandomOrder()->firstOrFail();
+        dd($post);
+        die();
+        return response()->json([
+            'success' => true,
+            'result' => $post
+        ]);
     }
 
 }

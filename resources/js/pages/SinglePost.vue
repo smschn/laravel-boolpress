@@ -11,6 +11,7 @@
                 <!-- per la key uso l'id dei tag perché univoci -->
                 <span v-for="tag in post.tags" v-bind:key="tag.id" class="btn btn-secondary mr-2 disabled">{{tag.name}}</span>
             </div>
+            <!-- PLACEHOLDER: qui gestire immagini quando le implemento -->
             <p>{{post.content}}</p>
             <router-link :to="{name: 'blog'}" class="btn btn-primary mr-2">Return to blog index</router-link>
         </article>
