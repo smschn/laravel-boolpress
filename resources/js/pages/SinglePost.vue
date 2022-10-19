@@ -1,10 +1,24 @@
 <template>
-    <h1>Single post page</h1>
+    <div>
+        <article>
+            <h1 >{{post.title}}</h1>
+            <div class="mb-2">{{post.category?post.category.name:'No category'}}</div>
+            <div class="mb-3">
+                <span v-for="tag in post.tags" class="btn btn-secondary mr-2 disabled" :key="tag.id">{{tag.name}}</span>
+            </div>
+            <p>{{post.content}}</p>
+        </article>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'SinglePost',
+    data() {
+        return {
+            post: null
+        }
+    },
     methods: {
         getSinglePost() {
 
@@ -22,7 +36,15 @@ export default {
             */
             axios.get('/api/posts/' + slug)
             .then( (response) => {
-                console.log(response.data);
+                this.post = response.data.result;
+            })
+            /*
+                con una catch() gestisco l'eventuale errore della ->firstOrFail() nell'API controller:
+                this.$router.push fa un redirect verso la route vue definita nel <name>
+                (usando il nome definito nel file router.js).
+            */
+            .catch((error) => {
+                this.$router.push({name: 'not-found'});
             })
         }
     },

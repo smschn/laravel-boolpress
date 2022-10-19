@@ -2116,8 +2116,15 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'SinglePost',
+  data: function data() {
+    return {
+      post: null
+    };
+  },
   methods: {
     getSinglePost: function getSinglePost() {
+      var _this = this;
+
       /*
           richiamo il sistema di routing di vue ($route) (in router.js),
           cerco la route con la URI con un parametro variabile con il nome <slug>,
@@ -2131,7 +2138,17 @@ __webpack_require__.r(__webpack_exports__);
       */
 
       axios.get('/api/posts/' + slug).then(function (response) {
-        console.log(response.data);
+        _this.post = response.data.result;
+      })
+      /*
+          con una catch() gestisco l'eventuale errore della ->firstOrFail() nell'API controller:
+          this.$router.push fa un redirect verso la route vue definita nel <name>
+          (usando il nome definito nel file router.js).
+      */
+      ["catch"](function (error) {
+        _this.$router.push({
+          name: 'not-found'
+        });
       });
     }
   },
@@ -2527,7 +2544,16 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("h1", [_vm._v("Single post page")]);
+  return _c("div", [_c("article", [_c("h1", [_vm._v(_vm._s(_vm.post.title))]), _vm._v(" "), _c("div", {
+    staticClass: "mb-2"
+  }, [_vm._v(_vm._s(_vm.post.category ? _vm.post.category.name : "No category"))]), _vm._v(" "), _c("div", {
+    staticClass: "mb-3"
+  }, _vm._l(_vm.post.tags, function (tag) {
+    return _c("span", {
+      key: tag.id,
+      staticClass: "btn btn-secondary mr-2 disabled"
+    }, [_vm._v(_vm._s(tag.name))]);
+  }), 0), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.post.content))])])]);
 };
 
 var staticRenderFns = [];
