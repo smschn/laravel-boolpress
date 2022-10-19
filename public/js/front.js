@@ -2073,7 +2073,8 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       /*
           per sapere l'url da contattare, controllare la lista delle routes con: php artisan route:list.
-          per gestire i post su più pagine, uso il secondo parametro di get() per gestire le query dinamicamente:
+          per gestire i post su più pagine, uso <params>:
+          il secondo parametro di get() per gestire le query dinamicamente,
           per ottenere un link del tipo: <../api/posts?page=1> (vedi in postman),
           con il numero del parametro <page> passato dall'html all'evento @click.
       */
@@ -2117,7 +2118,11 @@ __webpack_require__.r(__webpack_exports__);
   name: 'SinglePost',
   methods: {
     getSinglePost: function getSinglePost() {
-      // salvo in una variabile lo slug del post.
+      /*
+          richiamo il sistema di routing di vue ($route) (in router.js),
+          cerco la route con la URI con un parametro variabile con il nome <slug>,
+          salvo in una variabile lo slug del singolo post.
+      */
       var slug = this.$route.params.slug;
       /*
           faccio chiamata axios per ottenere tutti i dati del singolo post con questo specifico slug.
@@ -18823,6 +18828,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: "history",
+  // impedisce che nell'URI appaia il <#> quando clicco link gestiti da <router-link>.
   routes: [{
     path: '/',
     // scelgo l'uri del componente vue (l'url sarà: localhost/9999/).

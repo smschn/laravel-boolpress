@@ -40,20 +40,19 @@ class PostController extends Controller
      */
     public function show($slug) // ricevo in ingresso lo slug da <singlepost.vue> in \resources\js\pages\.
     {
-        // recupero il post con lo slug in ingresso.
-        $post = Post::where('slug', $slug)->first();
+        /*
+            recupero il post con lo slug in ingresso (::where), ricostruendo le relazioni con le altre tabelle (::with).
+            usando firstOrFail lancio un errore in caso non trovi il post:
+            recupero l'errore nel frontend (in singlepost.vue) con un .catch interno ad axios.
+        */
+        $post = Post::where('slug', $slug)->with(['category', 'tags'])->firstOrFail();
 
         // struttura con if per gestire la NON esistenza del post con quello specifico slug.
         if ($post) {
             // se esiste, lo invio in formato json al front, come risposta alla chiamata axios.
             return response()->json([
                 'success' => true,
-                'results' => $post
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Il post richiesto non esiste!' // lo vedo in console.
+                'result' => $post
             ]);
         }
     }
