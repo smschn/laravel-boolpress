@@ -45,6 +45,7 @@ class PostController extends Controller
 
         // struttura con if per gestire la NON esistenza del post con quello specifico slug.
         if ($post) {
+            // se esiste, lo invio in formato json al front, come risposta alla chiamata axios.
             return response()->json([
                 'success' => true,
                 'results' => $post

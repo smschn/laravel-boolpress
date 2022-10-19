@@ -15,7 +15,7 @@ import SinglePost from './pages/SinglePost.vue';
 
 // creo una nuova istanza di vue router.
 const router = new VueRouter({
-    mode: "history",
+    mode: "history", // impedisce che nell'URI appaia il <#> quando clicco link gestiti da <router-link>.
     routes: [
         {
             path: '/', // scelgo l'uri del componente vue (l'url sarà: localhost/9999/).
