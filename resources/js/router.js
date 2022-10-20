@@ -23,7 +23,7 @@ const router = new VueRouter({
             component: HomePage // riporto il nome del componente vue (nella sezione export del componente).
         },
         {
-            path: '/contact', // (l'url sarà: localhost/9999/contact).
+            path: '/contact', // l'url sarà: localhost/9999/contact.
             name: 'contact',
             component: ContactPage
         },

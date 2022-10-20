@@ -2126,14 +2126,16 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       /*
-          richiamo il sistema di routing di vue ($route) (in router.js),
-          cerco la route con la URI con un parametro variabile con il nome <slug>,
+          accedo al parametro dinamico <slug> dell'URI della route del singlepost
+          (es. <test-slug> in: localhost:9999/blog/test-slug):
+          richiamo il sistema di routing di vue (in router.js) con $route,
+          cerco la route con la URI che abbia un parametro variabile di nome <slug> (con sintassi :slug),
           salvo in una variabile lo slug del singolo post.
       */
       var slug = this.$route.params.slug;
       /*
           faccio chiamata axios per ottenere tutti i dati del singolo post con questo specifico slug.
-          l'URI è <api/posts/+slug> perché è impostato così nel file api.php:
+          l'URI è <api/posts/slug> perché è impostato così nel file api.php:
           facendo una chiamata axios a questa URI, richiamo la show() dentro il controller delle API.
       */
 
@@ -2141,9 +2143,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.post = response.data.result;
       })
       /*
-          con una catch() gestisco l'eventuale errore della ->firstOrFail() nell'API controller:
+          con una catch() in axios gestisco l'eventuale errore della ->firstOrFail() nell'API controller:
           this.$router.push fa un redirect verso la route vue definita nel <name>
-          (usando il nome definito nel file router.js).
+          (usando il nome della route vue definito nel file router.js).
           testo caricando una URI con uno slug non esistente (es: localhost:9999/blog/qazwsx):
           deve mostrare il componente vue con nome not-found.
       */
@@ -18888,7 +18890,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
   }, {
     path: '/contact',
-    // (l'url sarà: localhost/9999/contact).
+    // l'url sarà: localhost/9999/contact.
     name: 'contact',
     component: _pages_ContactPage_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   }, {
