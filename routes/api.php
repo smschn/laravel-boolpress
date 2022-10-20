@@ -35,3 +35,4 @@ Route::get('posts', 'Api\PostController@index');
 */
 Route::get('post/random', 'Api\PostController@randomPost');
 Route::get('posts/{slug}', 'Api\PostController@show');
+Route::get('testSendingEmail', 'Api\ContactController@sendEmailTest');
