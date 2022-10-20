@@ -13,7 +13,8 @@ class NewContact extends Mailable
 
     // questa classe rappresenta una mail.
 
-    // definisco una variabile pubblica\accessibile.
+    // definisco una variabile pubblica\accessibile:
+    // è un attributo del model <NewContact> che contiene i campi del contatto.
     public $lead;
 
     /**

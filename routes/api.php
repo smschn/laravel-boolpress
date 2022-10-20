@@ -35,4 +35,11 @@ Route::get('posts', 'Api\PostController@index');
 */
 Route::get('post/random', 'Api\PostController@randomPost');
 Route::get('posts/{slug}', 'Api\PostController@show');
-Route::get('testSendingEmail', 'Api\ContactController@sendEmailTest');
+// Route::get('testSendingEmail', 'Api\ContactController@sendEmailTest'); route usata solo come test.
+
+/*
+    questa route gestisce i dati in ingresso dal form in <contactpage.vue> inviati tramite axios:
+    quando tramite axios contatto l'URI /api/contacts,
+    viene avviato il metodo store() nel controller.
+*/
+Route::post('contacts', 'Api\ContactController@store');
