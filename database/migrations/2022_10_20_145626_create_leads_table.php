@@ -15,7 +15,7 @@ class CreateLeadsTable extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            // creo 3 colonne corrispondenti ai campi input che implementerò nel from di contatto nel frontend.
+            // creo 3 colonne corrispondenti ai campi input che implementerò nel form di contatto nel frontend.
             $table->string('name');
             $table->string('email');
             $table->text('message');
