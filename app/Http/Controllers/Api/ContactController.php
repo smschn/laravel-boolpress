@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Lead;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewContact;
+use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
@@ -30,11 +31,38 @@ class ContactController extends Controller
 
     /*
         funzione che:
-        1. salva nel database i dati provenienti (tramite axios) dal form in <contactpage.vue>.
-        2. invia una mail contenente quei dati.
+        1. accetta come parametro in ingresso i dati del form in <contactpage.vue> inviati tramite axios POST.
+        2. valida i dati in ingresso: NON posso usare ->validate(), quindi
+            separo la validazione dei dati in ingresso ($validator + ::make())
+            dalla gestione dell'eventuale errore di validazione (if() + $validator->fails()).
+        3. salva nel database i dati provenienti (tramite axios) dal form in <contactpage.vue>.
+        4. invia una mail contenente quei dati.
     */
     public function store(Request $request) {
         $data = $request->all();
+        
+        /*
+            prima gestisco la validazione usando ::make(), che accetta:
+            come primo parametro un oggetto da validare,
+            come secondo parametro le sue proprietà da validare, in un array.
+        */
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required'
+        ]);
+
+        /*
+            poi gestisco l'eventuale errore con ->fails(),
+            ritornando un oggetto json al frontend, nel <contactpage.vue>.
+        */
+        if ( $validator->fails() ) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors() // in <errors> inserisco gli errori di validazione.
+            ]);
+        } // in caso di errore di validazione il codice si blocca qui, essendoci già una return per la funzione store().
+
         $newLead = new Lead();
         $newLead->fill($data); // ricorda: aggiungere i campi nella $fillable del model <Lead>.
         $newLead->save();
