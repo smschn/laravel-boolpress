@@ -2427,7 +2427,12 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("h1", [_vm._v("Contact us")]), _vm._v(" "), _c("form", {
+  }, [_c("h1", [_vm._v("Contact us")]), _vm._v(" "), _vm.success ? _c("div", {
+    staticClass: "alert alert-success",
+    attrs: {
+      role: "alert"
+    }
+  }, [_vm._v("\n        Thank you for contacting us. You will receive a reply within a day.\n    ")]) : _vm._e(), _vm._v(" "), _c("form", {
     on: {
       submit: function submit($event) {
         $event.preventDefault();

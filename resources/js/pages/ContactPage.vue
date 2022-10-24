@@ -1,6 +1,12 @@
 <template>
     <div class="container">
         <h1>Contact us</h1>
+
+        <!-- messaggio di corretto invio del form -->
+        <div v-if="success" class="alert alert-success" role="alert">
+            Thank you for contacting us. You will receive a reply within a day.
+        </div>
+
         <!--
             al click sul button type=submit:
             prevengo il comportamento di default del <submit>
