@@ -19,8 +19,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        // ritorno tutti i post nella pagina amministrativa nella view index degli admin (di ha effettuato l'accesso)
-        $posts = Post::all();
+        /*
+            ritorno tutti i post nella view index degli admin (di ha effettuato l'accesso),
+            compresi i post cancellati con la soft delete usando ::withTrashed().
+        */
+        $posts = Post::withTrashed()->get();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -162,23 +165,29 @@ class PostController extends Controller
      */
     public function destroy(Post $post) // utilizzo la dependency injection.
     {
-        $post->tags()->sync([]); // prima di eliminare il post, cancello tutte le sue relazioni con i tag.
+        /*
+            usando la soft delete, NON devo cancellare le relazioni tra tabelle;
+            quindi commento la riga sotto che le cancellerebbe. 
+        */
+        // $post->tags()->sync([]); // prima di eliminare il post, cancello tutte le sue relazioni con i tag.
         $post->delete();
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted!'); // aggiunto messaggio di avvenuta cancellazione.
     }
 
     // creo una funzione per calcolare lo slug, al fine di non ripetere il codice sia nella store() sia nella update().
     protected function createSlug($titleP) {
+
+        // con ::withTrashed() recupero tutti i post, anche quelli cancellati con soft delete.
         // per evitare problemi di nomenclatura con lo slug (che deve essere UNIQUE - vedere migration), serve implementare quanto scritto sotto.
         $newSlug = Str::slug($titleP, '-'); // creo lo slug partendo dal titolo; importo la classe <Str> per usarla.
-        $checkPosts = Post::where('slug', $newSlug)->first(); // cerco nella tabella <posts> nel database se lo slug appena creato esiste e lo assegno (se non esiste, la variabile è NULL).
+        $checkPost = Post::withTrashed()->where('slug', $newSlug)->first(); // cerco nella tabella <posts> nel database se lo slug appena creato esiste e lo assegno (se non esiste, la variabile è NULL).
         $counter = 1; // imposto un contatore
-        while ($checkPosts) { // se lo slug esiste già, entro nel ciclo per crearne uno nuovo; altrimenti passo direttamente alla return.
+        while ($checkPost) { // se lo slug esiste già, entro nel ciclo per crearne uno nuovo; altrimenti passo direttamente alla return.
             $newSlug = Str::slug($titleP . '-' . $counter, '-'); // creo dinamicamente un nuovo slug aggiungendo il contatore alla fine.
             $counter++; // incremento il contatore.
             // per uscire dal ciclo, cerco nella tabella <posts> nel database se esiste già uno slug con il nome appena creato:
             // se esiste, torno nel ciclo (creando un nuovo slug), altrimenti esco dal ciclo (perché il nuovo slug dinamico non viene trovato nel database).
-            $checkPosts = Post::where('slug', $newSlug)->first();
+            $checkPost = Post::withTrashed()->where('slug', $newSlug)->first();
         }
         return $newSlug;
     }

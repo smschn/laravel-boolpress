@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    // aggiungo questa TRAIT, perché nella tabella <posts> ho inserito una colonna per gestire la soft delete.
+    use SoftDeletes;
+
     protected $fillable = [
         'title',
         'content',

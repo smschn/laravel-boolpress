@@ -45,6 +45,15 @@
                         @endif
                     </td>
                     <td class="d-flex">
+                        {{--
+                            gestisco i pulsanti con un @if:
+                            - se il post è stato cancellato con la soft delete attiva, mostro solo il pulsante restore:
+                                se è cancellato con la soft delete, avrà il campo <deleted_at>.
+                            - se il post NON è stato cancellato, mostro i 3 pulsanti di default.
+                        --}}
+                        @if ($post->deleted_at)
+                            <a href="{{route('admin.posts.index', ['post' => $post->id])}}" class="btn btn-success mx-1">Restore</a>
+                        @else
                         <a href="{{route('admin.posts.show', ['post' => $post->id])}}" class="btn btn-primary mx-1">View</a>
                         <a href="{{route('admin.posts.edit', ['post' => $post->id])}}" class="btn btn-dark mx-1">Edit</a>
                         <form action="{{route('admin.posts.destroy', ['post' => $post->id])}}" method="POST">
@@ -52,6 +61,7 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger mx-1">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
