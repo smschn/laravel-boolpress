@@ -44,8 +44,11 @@ class NewContact extends Mailable
         /*
             faccio una return alla view, passando come dato il $lead,
             che ora contiene i 3 campi <input> del form (name+email+message) con i rispettivi valori.
+            +
+            replyTo() aggancia alla mail di notifica ricevuta dall'amministratore
+            la mail di chi ha compilato il form (in $lead) per permettere la risposta a quell'indirizzo.
         */
-        return $this->view('emails.new_contact', ['lead' => $this->lead]);
+        return $this->replyTo($this->lead->email)->view('emails.new_contact', ['lead' => $this->lead]);
         // return $this->view('emails.new-contact'); questa sintassi è valida solo se $lead è public.
     }
 }
