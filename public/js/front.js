@@ -2007,18 +2007,45 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       // valori recuperati con v-model.
       email: '',
-      message: ''
+      message: '',
+      success: '',
+      errors: {},
+      sending: false // gestisco il bottone di invio rendendolo cliccabile (false) o meno (true).
+
     };
   },
   methods: {
     // faccio una chiamata axios con metodo POST per inviare questi dati al backend.
     sendMail: function sendMail() {
+      var _this = this;
+
+      // disabilito il bottone dell'invio.
+      this.sending = true; // chiamata axios post a api\contactcontroller.
+
       axios.post('api/contacts', {
         'name': this.name,
         'email': this.email,
         'message': this.message
       }).then(function (response) {
-        console.log(response);
+        // riabiliato il bottone dell'invio avendo ottenuto una risposta.
+        _this.sending = false; // recupero <success> dalla store() del controller, gestendola con un if.
+
+        _this.success = response.data.success;
+
+        if (_this.success) {
+          /*
+              success = true: azzero tutti i campi, compreso errors perché:
+              al primo tentativo l'invio form fallisce: errors{} contiene errori;
+              al secondo tentativo invio form riesce: devo azzerare gli errors{}.
+          */
+          _this.errors = {};
+          _this.name = '';
+          _this.email = '';
+          _this.message = '';
+        } else {
+          // success = false: salvo gli errori.
+          _this.errors = response.data.errors;
+        }
       });
     }
   }
@@ -2491,9 +2518,10 @@ var render = function render() {
   })]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary",
     attrs: {
-      type: "submit"
+      type: "submit",
+      disabled: _vm.sending
     }
-  }, [_vm._v("Submit")])])]);
+  }, [_vm._v(_vm._s(_vm.sending ? "Sending message..." : "Send"))])])]);
 };
 
 var staticRenderFns = [];

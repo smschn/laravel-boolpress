@@ -27,7 +27,8 @@
                 <textarea class="form-control" id="message" rows="5" v-model="message"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <!-- gestisco disabilitazione bottone attraverso variabile <sending> -->
+            <button type="submit" class="btn btn-primary" v-bind:disabled='sending'>{{sending?'Sending message...':'Send'}}</button>
         </form>
     </div>
 </template>
@@ -39,18 +40,47 @@
             return {
                 name: '', // valori recuperati con v-model.
                 email: '',
-                message: ''
+                message: '',
+                success: '',
+                errors: {},
+                sending: false // gestisco il bottone di invio rendendolo cliccabile (false) o meno (true).
             }
         },
         methods: {
+
             // faccio una chiamata axios con metodo POST per inviare questi dati al backend.
             sendMail() {
+
+                // disabilito il bottone dell'invio.
+                this.sending = true;
+                
+                // chiamata axios post a api\contactcontroller.
                 axios.post('api/contacts', {
                     'name': this.name,
                     'email': this.email,
                     'message': this.message
                 }).then( (response) => {
-                    console.log(response);
+
+                    // riabiliato il bottone dell'invio avendo ottenuto una risposta.
+                    this.sending = false;
+
+                    // recupero <success> dalla store() del controller, gestendola con un if.
+                    this.success = response.data.success;
+                    
+                    if (this.success) {
+                        /*
+                            success = true: azzero tutti i campi, compreso errors perché:
+                            al primo tentativo l'invio form fallisce: errors{} contiene errori;
+                            al secondo tentativo invio form riesce: devo azzerare gli errors{}.
+                        */
+                        this.errors = {};
+                        this.name = '';
+                        this.email = '';
+                        this.message = '';
+                    } else {
+                        // success = false: salvo gli errori.
+                        this.errors = response.data.errors;
+                    }
                 });
             }
         }

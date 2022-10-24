@@ -58,7 +58,7 @@ class ContactController extends Controller
         */
         if ( $validator->fails() ) {
             return response()->json([
-                'success' => false,
+                'success' => false, // nel frontend, nella chiamata axios, gestisco i due casi di <success>.
                 'errors' => $validator->errors() // in <errors> inserisco gli errori di validazione.
             ]);
         } // in caso di errore di validazione il codice si blocca qui, essendoci già una return per la funzione store().
