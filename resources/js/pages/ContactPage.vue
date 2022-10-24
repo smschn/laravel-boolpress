@@ -20,17 +20,27 @@
         <form @submit.prevent="sendMail">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" v-model="name"> <!-- con v-model recupero il dato -->
+                <input type="text" class="form-control" id="name" v-model="name" required> <!-- con v-model recupero il dato -->
+            </div>
+            <!-- stampo un messaggio d'errore -->
+            <div v-for="(error, index) in errors.name" v-bind:key="index" class="invalid-feedback">
+                {{error}}
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email">
+                <input type="email" class="form-control" id="email" v-model="email" required>
+            </div>
+            <div v-for="(error, index) in errors.email" v-bind:key="index" class="invalid-feedback">
+                {{error}}
             </div>
 
             <div class="form-group">
                 <label for="message">Messagge</label>
-                <textarea class="form-control" id="message" rows="5" v-model="message"></textarea>
+                <textarea class="form-control" id="message" rows="5" v-model="message" required></textarea>
+            </div>
+            <div v-for="(error, index) in errors.message" v-bind:key="index" class="invalid-feedback">
+                {{error}}
             </div>
 
             <!-- gestisco disabilitazione bottone attraverso variabile <sending> -->

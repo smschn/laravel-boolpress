@@ -2455,7 +2455,8 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "text",
-      id: "name"
+      id: "name",
+      required: ""
     },
     domProps: {
       value: _vm.name
@@ -2466,7 +2467,12 @@ var render = function render() {
         _vm.name = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm._l(_vm.errors.name, function (error, index) {
+    return _c("div", {
+      key: index,
+      staticClass: "invalid-feedback"
+    }, [_vm._v("\n            " + _vm._s(error) + "\n        ")]);
+  }), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -2482,7 +2488,8 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "email",
-      id: "email"
+      id: "email",
+      required: ""
     },
     domProps: {
       value: _vm.email
@@ -2493,7 +2500,12 @@ var render = function render() {
         _vm.email = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm._l(_vm.errors.email, function (error, index) {
+    return _c("div", {
+      key: index,
+      staticClass: "invalid-feedback"
+    }, [_vm._v("\n            " + _vm._s(error) + "\n        ")]);
+  }), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -2509,7 +2521,8 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       id: "message",
-      rows: "5"
+      rows: "5",
+      required: ""
     },
     domProps: {
       value: _vm.message
@@ -2520,13 +2533,18 @@ var render = function render() {
         _vm.message = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("button", {
+  })]), _vm._v(" "), _vm._l(_vm.errors.message, function (error, index) {
+    return _c("div", {
+      key: index,
+      staticClass: "invalid-feedback"
+    }, [_vm._v("\n            " + _vm._s(error) + "\n        ")]);
+  }), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary",
     attrs: {
       type: "submit",
       disabled: _vm.sending
     }
-  }, [_vm._v(_vm._s(_vm.sending ? "Sending message..." : "Send"))])])]);
+  }, [_vm._v(_vm._s(_vm.sending ? "Sending message..." : "Send"))])], 2)]);
 };
 
 var staticRenderFns = [];
