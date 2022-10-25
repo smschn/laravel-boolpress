@@ -52,7 +52,7 @@
                             - se il post NON è stato cancellato, mostro i 3 pulsanti di default.
                         --}}
                         @if ($post->deleted_at)
-                            <a href="{{route('admin.posts.index', ['post' => $post->id])}}" class="btn btn-success mx-1">Restore</a>
+                            <a href="{{route('admin.posts.restore', ['post' => $post->id])}}" class="btn btn-success mx-1">Restore</a>
                         @else
                         <a href="{{route('admin.posts.show', ['post' => $post->id])}}" class="btn btn-primary mx-1">View</a>
                         <a href="{{route('admin.posts.edit', ['post' => $post->id])}}" class="btn btn-dark mx-1">Edit</a>

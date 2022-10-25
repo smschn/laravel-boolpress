@@ -169,7 +169,13 @@ class PostController extends Controller
             usando la soft delete, NON devo cancellare le relazioni tra tabelle;
             quindi commento la riga sotto che le cancellerebbe. 
         */
-        // $post->tags()->sync([]); // prima di eliminare il post, cancello tutte le sue relazioni con i tag.
+
+        // PLACEHOLDER: se non uso la soft delete, cancello anche l'url dell'immagine.
+
+        // $post->tags()->sync([]); // prima di eliminare il post, cancello tutte le sue relazioni con i tag (se non uso la soft delete).
+
+        // $post->forceDelete(); se voglio eliminare definitivamente un dato dal database uso ->forceDelete().
+
         $post->delete();
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted!'); // aggiunto messaggio di avvenuta cancellazione.
     }
@@ -190,5 +196,16 @@ class PostController extends Controller
             $checkPost = Post::withTrashed()->where('slug', $newSlug)->first();
         }
         return $newSlug;
+    }
+
+    /*
+        funzione legata al pulsante <restore> nella view index dei post,
+        adibita ad annullare la soft delete sul singolo post:
+        recupera il post dall'id, cercando tra quelli eliminati, e lo ripristina + redirect con messaggio.
+    */
+    public function restore($id) {
+        $post = Post::withTrashed()->where('id', $id)->first();
+        $post->restore();
+        return redirect()->route('admin.posts.index')->with('status', 'Post successfully restored');
     }
 }
