@@ -170,9 +170,9 @@ class PostController extends Controller
             quindi commento la riga sotto che le cancellerebbe. 
         */
 
-        // PLACEHOLDER: se non uso la soft delete, cancello anche l'url dell'immagine.
+        // PLACEHOLDER: se non uso la soft delete: cancello anche l'url dell'immagine.
 
-        // $post->tags()->sync([]); // prima di eliminare il post, cancello tutte le sue relazioni con i tag (se non uso la soft delete).
+        // $post->tags()->sync([]); // se non uso la soft delete: prima di eliminare il post, cancello tutte le sue relazioni.
 
         // $post->forceDelete(); se voglio eliminare definitivamente un dato dal database uso ->forceDelete().
 
@@ -207,5 +207,23 @@ class PostController extends Controller
         $post = Post::withTrashed()->where('id', $id)->first();
         $post->restore();
         return redirect()->route('admin.posts.index')->with('status', 'Post successfully restored');
+    }
+
+    /* 
+        funzione che forza la cancellazione dal database di un post
+        (tra quelli già cancellati con la soft delete):
+        recupera il post dall'id, cercando tra quelli eliminati, elimina le relazioni e il post + redirect con messaggio.
+    */
+    public function forceDelete($id) {
+        $post = Post::withTrashed()->where('id', $id)->first();
+        /*
+            PLACEHOLDER: qui cancello l'eventuale img\file associato:
+            if ($post->cover) {
+                Storage::delete($post->cover);
+            }
+        */
+        $post->tags()->sync([]);
+        $post->forceDelete();
+        return redirect()->route('admin.posts.index')->with('status', 'Post successfully deleted from database');
     }
 }
