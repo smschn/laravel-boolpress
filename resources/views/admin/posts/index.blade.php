@@ -47,8 +47,10 @@
                     <td class="d-flex">
                         {{--
                             gestisco i pulsanti con un @if:
-                            - se il post è stato cancellato con la soft delete attiva, mostro solo il pulsante restore:
-                                se è cancellato con la soft delete, avrà il campo <deleted_at>.
+                            - se il post è stato cancellato con la soft delete attiva,
+                                (quindi ha il campo <deleted_at>) mostro:
+                                - il pulsante restore.
+                                - il pulsante forceDelete.
                             - se il post NON è stato cancellato, mostro i 3 pulsanti di default.
                         --}}
                         @if ($post->deleted_at)
