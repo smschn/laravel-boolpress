@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Auth; // aggiunto per non visualizzare errore in 
 |
 */
 
-Auth::routes();
+// disabilito la pagina di registrazione.
+Auth::routes(['register' => false]);
 
 /*
     si raggruppano tutte le routes relative alla parte amministrativa del sito attuando un filtraggio a monte, tra tutte le route esistenti:
