@@ -9,6 +9,7 @@ use App\Post; // importo il model <post> per poterlo usare in questo file.
 use App\Category; // importo il model <category> per poterlo usare in questo file.
 use App\Tag; // importo il model <tag> per poter usare i metodi statici in questo file.
 use Illuminate\Support\Str; // importo questa classe per poterla usare nella creazione dello <slug>.
+use Illuminate\Support\Facades\Storage; // importo lo storage per usarla nella gestione delle immagini.
 
 class PostController extends Controller
 {
@@ -51,16 +52,39 @@ class PostController extends Controller
             [
                 'title' => 'required|max:255|min:5',
                 'content' => 'required|max:65535|min:5',
-                // aggiungo validazione della nuova colonna (foreign key).
-                // può non essere selezionata (nullable).
-                // exists = l'<id> di <category_id> deve esistere nella tabella <categories>, nella colonna <id>.
+                /*
+                    aggiungo validazione della nuova colonna <category> (foreign key):
+                    - può non essere selezionata (nullable).
+                    - exists: l'<id> di <category_id> deve esistere nella tabella <categories>, nella colonna <id>.
+                */
                 'category_id' => 'nullable|exists:categories,id',
                 // aggiungo validazione dell'array tags[] (se esistente) proveniente dalla checkbox della view create:
                 // ogni <id> contenuto nell'array deve esistere nella tabella <tags>, alla colonna <id>.
-                'tags' => 'exists:tags,id' 
+                'tags' => 'exists:tags,id',
+                /* 
+                    aggiungo validazione dell'immagine:
+                    - è un campo che può essere null.
+                    - deve essere un'immagine.
+                    - deve avere un peso massimo di 8mb.
+                */
+                'image' => 'nullable|image|max:8000'
             ]
         );
+
         $data = $request->all();
+        
+        /*
+            il metodo ::put():
+            - come primo parametro accetta il nome della cartella in \storage\app\public\ dove salvare l'immagine (se non c'è, la crea).
+            - come secondo parametro accetta l'immagine da salvare contenuta in $data['image'].
+            - restituisce la path relativa di dove viene salvata l'immagine:
+                - la salvo in una variabile
+                - la aggiungo a $data nell'attributo <cover>:
+                    in tal modo con la fill() si auto-completa il campo <cover> nel database con la path.
+        */
+        $img_path = Storage::put('cover', $data['image']);
+        $data['cover'] = $img_path;
+
         $newPost = new Post();
         $newPost->fill($data); // ricorda: aggiungi nella $fillable del model <post> la colonna <category_id> affinché fill() funzioni correttamente.
         $newSlug = $this->createSlug($newPost->title); // ricorda: usare $this-> dentro le classi; creo un nuovo slug richiamando la funzione.

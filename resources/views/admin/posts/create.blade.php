@@ -3,9 +3,21 @@
 @section('content')
 
     <div class="container">
-        <form action="{{route('admin.posts.store')}}" method="POST">
+        <form action="{{route('admin.posts.store')}}" method="POST" enctype="multipart/form-data">
 
             @csrf {{-- aggiunge un token all'invio del form --}}
+
+            {{-- aggiungo l'upload di file --}}
+            <div class="form-group mb-3">
+                <label for="cover">Image cover:</label>
+                <input type="file" name="image" id="cover" class="form-control-file @error('image') is-invalid @enderror" />
+
+                @error('image')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
 
             <div class="form-group mb-3">
                 <label for="categoryId">Category:</label>
