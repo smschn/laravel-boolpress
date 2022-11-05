@@ -32,6 +32,7 @@ Route::middleware('auth') // controlla se il visitatore ha l'autorizzazione per 
         Route::resource('posts', 'PostController'); // route che gestisce in automatico le operazioni CRUD sui post: si trova tra quelle amministrative perché solo chi è loggato può gestire i post.
         Route::resource('tags', 'TagController'); // route che gestisce in automatico le operazioni CRUD sui tag.
         Route::get('posts/restore/{post}', 'PostController@restore')->name('posts.restore'); // gestisce l'annullamento della soft delete di un post.
+        Route::delete('posts/deleteCover/{post}', 'PostController@deleteCover')->name('posts.deleteCover'); // gestisce la cancellazione dell'immagine di un post.
         Route::delete('posts/forceDelete/{post}', 'PostController@forceDelete')->name('posts.forceDelete'); // gestisce la cancellazione definitiva dal database di un post.
     });
 

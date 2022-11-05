@@ -77,10 +77,11 @@ class PostController extends Controller
             il metodo ::put():
             - come primo parametro accetta il nome della cartella in \storage\app\public\ dove salvare l'immagine (se non c'è, la crea).
             - come secondo parametro accetta l'immagine da salvare contenuta in $data['image'].
-            - restituisce la path relativa di dove viene salvata l'immagine:
-                - la salvo in una variabile
-                - la aggiungo a $data nell'attributo <cover>:
+            - restituisce la path relativa di dove viene salvata l'immagine (cover/nome_casuale_immagine: vedi nel database):
+                -- salvo la path in una variabile.
+                -- la aggiungo a $data nell'attributo <cover>:
                     in tal modo con la fill() si auto-completa il campo <cover> nel database con la path.
+            => ricorda: laravel rinomina in modo casuale le immagini prima di metterle nel db tramite la storage::put().
         */
         $img_path = Storage::put('cover', $data['image']);
         $data['cover'] = $img_path;
@@ -139,10 +140,28 @@ class PostController extends Controller
                 'title' => 'required|max:255|min:5',
                 'content' => 'required|max:65535|min:5',
                 'category_id' => 'nullable|exists:categories,id', // aggiungo validazione della nuova colonna (foreign key).
-                'tags' => 'exists:tags,id' // aggiungo validazione tags.
+                'tags' => 'exists:tags,id', // aggiungo validazione tags.
+                'image' => 'nullable|image|max:8000' // validazione immagine.
             ]
         );
         $data = $request->all();
+
+        /*
+            gestisco la situazione dell'imagine:
+            - se non ho l'immagine in $data, non faccio nulla.
+            - se ho l'immagine in $data:
+                -- se il post ha già un'immagine, la cancello con Storage::delete().
+                -- salvo l'immagine contenuta in $data nella cartella \storage\cover\ tramite <storage::put()>.
+                -- inserisco la path relativa dell'immagine ottenuta da <storage::put()> nella proprietà <cover> di data:
+                    --- così grazie a fill() si autocompila il post.
+        */
+        if (array_key_exists('image', $data) ) {
+            if ( $post->cover ) {
+                Storage::delete($post->cover);
+            }
+            $img_path = Storage::put('cover', $data['image']);
+            $data['cover'] = $img_path;
+        }
         
         // se il titolo è stato modificato, devo creare un nuovo slug relativo al nuovo titolo.
         if ($post->title !== $data['title']) {
@@ -200,6 +219,15 @@ class PostController extends Controller
 
         // $post->forceDelete(); se voglio eliminare definitivamente un dato dal database uso ->forceDelete().
 
+        /*
+            se non uso la soft delete:
+            prima di cancellare il post, cancello il campo immagine dal database.
+
+        if ($post->cover) {
+            Storage::delete($post->cover);
+        }
+        */
+
         $post->delete();
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted!'); // aggiunto messaggio di avvenuta cancellazione.
     }
@@ -234,20 +262,47 @@ class PostController extends Controller
     }
 
     /* 
-        funzione che forza la cancellazione dal database di un post
+        funzione che forza la cancellazione di un post dal database
         (tra quelli già cancellati con la soft delete):
-        recupera il post dall'id, cercando tra quelli eliminati, elimina le relazioni e il post + redirect con messaggio.
+        - recupera il post dall'id, cercando anche tra quelli eliminati.
+        - elimina l'immagine, se presente.
+        - elimina le relazioni.
+        - elimina il post dal database.
+        - redirect con messaggio.
     */
     public function forceDelete($id) {
         $post = Post::withTrashed()->where('id', $id)->first();
-        /*
-            PLACEHOLDER: qui cancello l'eventuale img\file associato:
-            if ($post->cover) {
-                Storage::delete($post->cover);
-            }
-        */
+
+        if ($post->cover) {
+            Storage::delete($post->cover);
+        }
+
         $post->tags()->sync([]);
         $post->forceDelete();
+
         return redirect()->route('admin.posts.index')->with('status', 'Post successfully deleted from database');
+    }
+
+    /* 
+        funzione richiamata nella view edit che:
+        - elimina l'immagine del post, se presente.
+        - imposta il campo cover nel database a null.
+        - salva le modifiche del post.
+        - redirect con messaggio sulla view edit del post che si sta modificando.
+    */
+    public function deleteCover(Post $post) {
+        if ($post->cover) {
+            Storage::delete($post->cover);
+        }
+
+        $post->cover= null;
+        $post->save();
+
+        /*
+            specifico l'id del post a cui fare il redirect,
+            perché la route posts.edit ha un parametro dinamico che devo specificare
+            (vedi la route:list per chiarimenti).
+        */
+        return redirect()->route('admin.posts.edit', ['post' => $post->id])->with('status', 'Image successfully deleted.');
     }
 }

@@ -7,6 +7,13 @@
         <h3 class="fw-bold">Title:</h3>
         <p>{{$post->title}}</p>
 
+        <h3 class="fw-bold">Cover image:</h3>
+        @if ($post->cover)
+            <img src="{{asset('storage/' . $post->cover)}}" class="img-thumbnail mb-3" style="max-width:150px" />
+        @else
+            <img src="{{asset('img/no_img.png')}}" class="img-thumbnail mb-3" style="max-width:150px" />
+        @endif
+
         <h3 class="fw-bold">Slug:</h3>
         <p>{{$post->slug}}</p>
         

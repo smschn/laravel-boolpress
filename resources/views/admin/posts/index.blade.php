@@ -20,7 +20,14 @@
             <tbody>
             @foreach ($posts as $post)
                 <tr>
-                    <th scope="row">{{$post->id}}</th>
+                    <td scope="row">{{$post->id}}</td>
+                    <td scope="row">
+                        @if ($post->cover)
+                            <img src="{{asset('storage/' . $post->cover)}}" class="img-thumbnail" style="width:75px" />
+                        @else
+                            <img src="{{asset('img/no_img.png')}}" class="img-thumbnail" style="width:75px" />
+                        @endif
+                    </td>
                     <td>{{$post->title}}</td>
                     <td>{{$post->slug}}</td>
                     {{--

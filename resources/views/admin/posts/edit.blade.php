@@ -3,7 +3,19 @@
 @section('content')
 
     <div class="container">
-        <form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="POST">
+
+        {{--
+            form per cancellare solo l'immagine usando una funzione appositamente creata deleteCover().
+            per funzionare deve ovviamente stare fuori dall'altro form.
+        --}}
+        <form action="{{route('admin.posts.deleteCover', ['post' => $post])}}" method="POST" id="deleteCoverForm">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger mb-3">Delete post image only</button>
+        </form>
+
+        {{-- form per editare tutto --}}
+        <form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="POST" enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
@@ -31,6 +43,31 @@
 
                 @error('title')
                     <div class="alert alert-danger mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- aggiungo edit per l'immagine --}}
+            <div class="form-group mb-3">
+
+                {{-- se c'è già un'immagine, la mostro --}}
+                <p>Current image:</p>
+                @if ($post->cover)
+                    <img src="{{asset('storage/' . $post->cover)}}" class="img-thumbnail mb-3" style="max-width:150px" />
+                    <!-- <a href="#" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('deleteCoverForm').submit();">Delete immagine</a> -->
+                @else
+                    <p>No loaded image!</p>
+                @endif
+
+                <br>
+
+                {{-- input per inserire l'immagine --}}
+                <label for="cover">New image cover: </label>
+                <input type="file" name="image" id="cover" class="form-control-file @error('image') is-invalid @enderror" />
+
+                @error('image')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                 @enderror
             </div>
 
